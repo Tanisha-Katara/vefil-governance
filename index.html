@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>veFIL Phase I Governance — Case Study | Tanisha Katara</title>
+<style>
+  /* ─── Reset & Base ─── */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    color: #4b5563;
+    background: #fff;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3, h4 { color: #111827; line-height: 1.25; }
+  a { color: #2563eb; text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  img { max-width: 100%; height: auto; display: block; }
+
+  /* ─── Nav ─── */
+  nav {
+    position: fixed; top: 0; left: 0; width: 100%; z-index: 100;
+    background: rgba(255,255,255,0.72);
+    backdrop-filter: saturate(180%) blur(12px);
+    -webkit-backdrop-filter: saturate(180%) blur(12px);
+    border-bottom: 1px solid rgba(0,0,0,0.08);
+    transition: box-shadow 0.3s;
+  }
+  nav.scrolled { box-shadow: 0 2px 12px rgba(0,0,0,0.08); }
+  .nav-inner {
+    max-width: 1100px; margin: 0 auto;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 24px; height: 60px;
+  }
+  .nav-logo { font-weight: 600; color: #111827; font-size: 1rem; white-space: nowrap; }
+  .nav-links { display: flex; gap: 28px; list-style: none; }
+  .nav-links a { color: #4b5563; font-size: 0.9rem; font-weight: 500; transition: color 0.2s; }
+  .nav-links a:hover { color: #2563eb; text-decoration: none; }
+  @media (max-width: 600px) {
+    .nav-links { gap: 16px; }
+    .nav-links a { font-size: 0.82rem; }
+    .nav-logo { font-size: 0.88rem; }
+  }
+
+  /* ─── Hero ─── */
+  .hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center; padding: 100px 24px 80px;
+    background: linear-gradient(170deg, #eef2ff 0%, #fff 55%);
+  }
+  .hero-label {
+    display: inline-block;
+    background: #eef2ff; color: #2563eb;
+    font-size: 0.78rem; font-weight: 600; letter-spacing: 0.08em;
+    text-transform: uppercase; padding: 6px 14px; border-radius: 20px;
+    margin-bottom: 24px;
+  }
+  .hero h1 { font-size: clamp(2rem, 5vw, 3.2rem); max-width: 780px; margin-bottom: 20px; }
+  .hero-sub { font-size: 1.1rem; max-width: 640px; color: #6b7280; margin-bottom: 36px; }
+  .hero-author { font-size: 0.95rem; color: #6b7280; }
+  .hero-author strong { color: #111827; }
+
+  /* ─── Background Primer ─── */
+  .primer {
+    background: #f0f4ff;
+    border-top: 1px solid #dbe7ff;
+    border-bottom: 1px solid #dbe7ff;
+    padding: 40px 24px;
+  }
+  .primer-inner {
+    max-width: 740px; margin: 0 auto;
+    display: flex; gap: 20px; align-items: flex-start;
+  }
+  .primer-label {
+    flex-shrink: 0;
+    font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em;
+    text-transform: uppercase; color: #2563eb;
+    background: #fff; border: 1px solid #c7d6ff;
+    padding: 4px 10px; border-radius: 4px; white-space: nowrap;
+    margin-top: 2px;
+  }
+  .primer-text { font-size: 0.93rem; color: #4b5563; line-height: 1.7; }
+  .primer-text strong { color: #111827; }
+
+  /* ─── Section Commons ─── */
+  section { padding: 96px 24px; }
+  .section-inner { max-width: 900px; margin: 0 auto; }
+  .section-inner.wide { max-width: 1060px; }
+  .section-label {
+    font-size: 0.75rem; font-weight: 700; letter-spacing: 0.1em;
+    text-transform: uppercase; color: #2563eb; margin-bottom: 12px;
+  }
+  .section-title { font-size: clamp(1.6rem, 3vw, 2.2rem); margin-bottom: 16px; }
+  .section-desc { color: #6b7280; max-width: 680px; margin-bottom: 40px; font-size: 1.05rem; }
+
+  /* ─── Mechanism ─── */
+  #mechanism { background: #fafafa; }
+  .assumptions-grid {
+    display: grid; gap: 12px; margin-bottom: 48px;
+  }
+  @media (min-width: 700px) { .assumptions-grid { grid-template-columns: repeat(2, 1fr); } }
+  .assumption-item {
+    background: #fff; border: 1px solid #e2e8f0; border-radius: 10px;
+    padding: 18px 20px; display: flex; gap: 14px; align-items: flex-start;
+    font-size: 0.9rem; color: #4b5563;
+  }
+  .assumption-num {
+    flex-shrink: 0; width: 26px; height: 26px; border-radius: 50%;
+    background: #eef2ff; color: #2563eb;
+    font-weight: 700; font-size: 0.82rem;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .assumption-item strong { color: #111827; }
+
+  .flow-img-wrap {
+    margin-top: 48px;
+    border-radius: 12px; overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    border: 1px solid #e2e8f0;
+  }
+  .flow-img-wrap img { border-radius: 12px; }
+
+  /* ─── Governance Action Types ─── */
+  .action-cards {
+    display: grid; gap: 24px;
+  }
+  @media (min-width: 700px) { .action-cards { grid-template-columns: repeat(3, 1fr); } }
+  .action-card {
+    background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 14px;
+    padding: 28px; display: flex; flex-direction: column;
+  }
+  .action-badge {
+    display: inline-block; width: fit-content;
+    font-size: 0.72rem; font-weight: 700; letter-spacing: 0.06em;
+    text-transform: uppercase; padding: 5px 12px; border-radius: 6px;
+    color: #fff; margin-bottom: 16px;
+  }
+  .action-badge.blue   { background: #2563eb; }
+  .action-badge.purple { background: #7c3aed; }
+  .action-badge.green  { background: #059669; }
+  .action-card h4 { font-size: 1.05rem; margin-bottom: 10px; }
+  .action-card .decision-q {
+    font-size: 0.88rem; color: #4b5563; font-style: italic;
+    margin-bottom: 16px; padding-bottom: 16px;
+    border-bottom: 1px solid #e2e8f0;
+  }
+  .action-meta { margin-top: auto; }
+  .action-meta-row {
+    display: flex; justify-content: space-between; align-items: baseline;
+    padding: 6px 0; border-bottom: 1px solid #f0f0f0; font-size: 0.85rem;
+  }
+  .action-meta-row:last-child { border-bottom: none; }
+  .action-meta-row .label { color: #6b7280; }
+  .action-meta-row .value { font-weight: 600; color: #111827; }
+
+  /* ─── Voting & Consensus ─── */
+  .voting-flows {
+    display: grid; gap: 40px; margin-bottom: 56px;
+  }
+  @media (min-width: 700px) { .voting-flows { grid-template-columns: 1fr 1fr; } }
+  .voting-flow-card {
+    background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 14px;
+    padding: 28px;
+  }
+  .voting-flow-card .flow-header {
+    display: flex; align-items: center; gap: 10px; margin-bottom: 20px;
+  }
+  .flow-dot {
+    width: 14px; height: 14px; border-radius: 50%; flex-shrink: 0;
+  }
+  .flow-dot.amber  { background: #d97706; }
+  .flow-dot.blue   { background: #2563eb; }
+  .voting-flow-card .flow-header h4 { font-size: 1.05rem; margin: 0; }
+  .flow-step-list { list-style: none; }
+  .flow-step-list li {
+    display: flex; gap: 12px; align-items: flex-start;
+    padding: 10px 0; border-bottom: 1px solid #eef2f7; font-size: 0.88rem;
+  }
+  .flow-step-list li:last-child { border-bottom: none; }
+  .flow-step-num {
+    flex-shrink: 0; width: 22px; height: 22px; border-radius: 50%;
+    font-size: 0.75rem; font-weight: 700;
+    display: flex; align-items: center; justify-content: center; color: #fff;
+  }
+  .flow-step-num.amber  { background: #d97706; }
+  .flow-step-num.blue   { background: #2563eb; }
+  .flow-step-list .step-text strong { color: #111827; display: block; margin-bottom: 2px; }
+  .flow-step-list .step-text span { color: #6b7280; font-size: 0.82rem; }
+
+  /* Aggregation model */
+  .aggregation-block {
+    background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 14px;
+    padding: 32px;
+  }
+  .aggregation-block h3 { font-size: 1.15rem; margin-bottom: 8px; }
+  .aggregation-block > p { color: #6b7280; font-size: 0.93rem; margin-bottom: 24px; }
+  .agg-formula {
+    display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+    margin-bottom: 28px;
+  }
+  .agg-signal {
+    background: #fff; border: 1px solid #e2e8f0; border-radius: 10px;
+    padding: 16px 20px; text-align: center; flex: 1; min-width: 130px;
+  }
+  .agg-signal .pct { font-size: 1.6rem; font-weight: 700; }
+  .agg-signal .pct.amber { color: #d97706; }
+  .agg-signal .pct.blue  { color: #2563eb; }
+  .agg-signal .pct.dark  { color: #111827; }
+  .agg-signal .lbl { font-size: 0.78rem; color: #6b7280; margin-top: 4px; }
+  .agg-op {
+    font-size: 1.4rem; font-weight: 700; color: #9ca3af; flex-shrink: 0;
+  }
+  .agg-example {
+    background: #eef2ff; border-radius: 8px; padding: 16px 20px;
+    font-size: 0.88rem; color: #4b5563;
+  }
+  .agg-example strong { color: #111827; }
+  .agg-example code {
+    display: block; margin-top: 8px;
+    background: #fff; border: 1px solid #dbe7ff; border-radius: 6px;
+    padding: 10px 14px; font-size: 0.84rem; color: #2563eb; font-family: monospace;
+  }
+  .agg-rationale { margin-top: 28px; }
+  .agg-rationale h4 { font-size: 0.95rem; margin-bottom: 10px; }
+  .agg-rationale ul { padding-left: 18px; font-size: 0.88rem; color: #6b7280; }
+  .agg-rationale ul li { margin-bottom: 6px; }
+
+  /* ─── Open Questions ─── */
+  #open { background: #fafafa; }
+  .questions-list { margin-bottom: 48px; }
+  .question-item {
+    display: flex; gap: 16px; align-items: flex-start;
+    padding: 16px 0; border-bottom: 1px solid #eee; font-size: 0.93rem;
+  }
+  .question-item:last-child { border-bottom: none; }
+  .question-icon {
+    flex-shrink: 0; width: 28px; height: 28px; border-radius: 8px;
+    background: #eef2ff; display: flex; align-items: center; justify-content: center;
+  }
+  .question-icon svg { width: 16px; height: 16px; stroke: #2563eb; fill: none; stroke-width: 2; }
+  .question-item strong { color: #111827; display: block; margin-bottom: 2px; }
+  .question-item span { color: #6b7280; font-size: 0.85rem; }
+
+  .status-img-wrap {
+    border-radius: 12px; overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    border: 1px solid #e2e8f0;
+  }
+  .status-img-wrap img { border-radius: 12px; }
+
+  /* ─── Roadmap ─── */
+  .roadmap-phases {
+    display: grid; gap: 24px; margin-bottom: 48px;
+  }
+  @media (min-width: 700px) { .roadmap-phases { grid-template-columns: repeat(3, 1fr); } }
+  .phase-card {
+    background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 14px;
+    padding: 28px; position: relative;
+  }
+  .phase-card::before {
+    content: ""; position: absolute; top: 0; left: 0; right: 0;
+    height: 4px; border-radius: 14px 14px 0 0;
+  }
+  .phase-card.phase-1::before { background: #2563eb; }
+  .phase-card.phase-2::before { background: #7c3aed; }
+  .phase-card.phase-3::before { background: #059669; }
+  .phase-num {
+    font-size: 0.72rem; font-weight: 700; letter-spacing: 0.06em;
+    text-transform: uppercase; padding: 4px 10px; border-radius: 4px;
+    color: #fff; margin-bottom: 12px; display: inline-block;
+  }
+  .phase-num.blue   { background: #2563eb; }
+  .phase-num.purple { background: #7c3aed; }
+  .phase-num.green  { background: #059669; }
+  .phase-card h4 { font-size: 1.05rem; margin-bottom: 6px; }
+  .phase-card .phase-when { font-size: 0.8rem; color: #6b7280; margin-bottom: 14px; }
+  .phase-card .phase-goal { font-size: 0.88rem; color: #4b5563; margin-bottom: 14px; }
+  .phase-card ul { padding-left: 16px; font-size: 0.84rem; color: #6b7280; }
+  .phase-card ul li { margin-bottom: 5px; }
+
+  /* Next steps strip */
+  .next-steps {
+    background: #111827; color: #fff; border-radius: 14px;
+    padding: 36px 32px;
+  }
+  .next-steps h3 { font-size: 1.15rem; margin-bottom: 16px; color: #fff; }
+  .next-steps-grid {
+    display: grid; gap: 16px;
+  }
+  @media (min-width: 700px) { .next-steps-grid { grid-template-columns: repeat(2, 1fr); } }
+  .next-step {
+    display: flex; gap: 14px; align-items: flex-start;
+  }
+  .next-step-num {
+    flex-shrink: 0; width: 28px; height: 28px; border-radius: 50%;
+    background: rgba(255,255,255,0.12); color: #fff;
+    font-weight: 700; font-size: 0.82rem;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .next-step p { font-size: 0.88rem; color: #9ca3af; }
+  .next-step strong { color: #e2e8f0; }
+
+  /* ─── Footer ─── */
+  footer {
+    background: #111827; color: #9ca3af;
+    padding: 48px 24px; text-align: center;
+    border-top: 1px solid #1f2937;
+  }
+  .footer-name { color: #fff; font-weight: 600; font-size: 1rem; margin-bottom: 8px; }
+  .footer-disclaimer {
+    max-width: 720px; margin: 20px auto 0; font-size: 0.78rem;
+    line-height: 1.6; color: #6b7280;
+  }
+  .footer-disclaimer p { margin-bottom: 8px; }
+</style>
+</head>
+<body>
+
+<!-- ─── Nav ─── -->
+<nav id="nav">
+  <div class="nav-inner">
+    <div class="nav-logo">Tanisha Katara</div>
+    <ul class="nav-links">
+      <li><a href="#mechanism">Mechanism</a></li>
+      <li><a href="#governance">Governance</a></li>
+      <li><a href="#voting">Voting</a></li>
+      <li><a href="#roadmap">Roadmap</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- ─── Hero ─── -->
+<section class="hero">
+  <div class="hero-label">Case Study</div>
+  <h1>veFIL Phase I: Piloting Lock-Based Governance for Filecoin</h1>
+  <p class="hero-sub">
+    Designing a controlled, signal-first experiment to test whether capital-weighted,
+    time-locked voting can credibly govern public-goods funding on Filecoin &mdash;
+    without disrupting existing staking economics or protocol security.
+  </p>
+  <p class="hero-author"><strong>Tanisha Katara</strong> &mdash; Senior Governance Consultant, Filecoin</p>
+</section>
+
+<!-- ─── Background Primer ─── -->
+<div class="primer">
+  <div class="primer-inner">
+    <span class="primer-label">Background</span>
+    <p class="primer-text">
+      <strong>Filecoin's Mining Reserve</strong> is a pool of FIL set aside to fund
+      public-goods programs (ProPGF and RetroPGF). Today, allocation decisions within
+      these programs are made by a curated set of <strong>badgeholders</strong> &mdash;
+      trusted community members who signal which projects deserve funding. <strong>veFIL</strong>
+      (vote-escrow FIL) is a proposed governance token issued to FIL holders who voluntarily
+      lock their FIL via approved staking partners. The longer you lock, the more veFIL you
+      receive. veFIL is non-transferable: it cannot be bought or sold, only earned through
+      commitment. This Phase I pilot tests whether veFIL signals, combined with existing
+      badgeholder judgment, produce better funding outcomes than badgeholders alone.
+    </p>
+  </div>
+</div>
+
+<!-- ─── The Mechanism ─── -->
+<section id="mechanism">
+  <div class="section-inner wide">
+    <p class="section-label">The Mechanism</p>
+    <h2 class="section-title">How veFIL Works</h2>
+    <p class="section-desc">
+      The pilot is intentionally narrow. Staking partners continue to offer staking
+      and APY exactly as before. veFIL is layered on top as a non-transferable governance
+      weight &mdash; no changes to yield, no protocol parameter risk.
+    </p>
+
+    <!-- Key Assumptions -->
+    <h3 style="font-size: 1.1rem; margin-bottom: 16px;">Phase I Design Assumptions</h3>
+    <div class="assumptions-grid">
+      <div class="assumption-item">
+        <div class="assumption-num">1</div>
+        <div><strong>Off-chain signaling</strong> in Phase I keeps risk low before any on-chain consequences are introduced.</div>
+      </div>
+      <div class="assumption-item">
+        <div class="assumption-num">2</div>
+        <div><strong>Mining Reserve funds PGF</strong> &mdash; veFIL holders have skin in the game because their locked FIL backs the treasury.</div>
+      </div>
+      <div class="assumption-item">
+        <div class="assumption-num">3</div>
+        <div><strong>APYs incentivise locking</strong> &mdash; staking rewards from partners make voluntary lock-up attractive without governance mandating it.</div>
+      </div>
+      <div class="assumption-item">
+        <div class="assumption-num">4</div>
+        <div><strong>Security layer persists</strong> &mdash; badgeholders and multi-sig controls remain in place for all disbursements.</div>
+      </div>
+      <div class="assumption-item">
+        <div class="assumption-num">5</div>
+        <div><strong>Partner integration is operational</strong> &mdash; platforms such as GLIF can issue veFIL against locked FIL.</div>
+      </div>
+      <div class="assumption-item">
+        <div class="assumption-num">6</div>
+        <div><strong>veFIL is non-transferable</strong> &mdash; prevents vote-market manipulation and maintains long-term commitment as the signal.</div>
+      </div>
+      <div class="assumption-item">
+        <div class="assumption-num">7</div>
+        <div><strong>Quorum is achievable</strong> &mdash; based on a 100M+ FIL locked target, 5% participation for budget votes is realistic.</div>
+      </div>
+      <div class="assumption-item">
+        <div class="assumption-num">8</div>
+        <div><strong>Governance Hub is ready</strong> &mdash; a front-end for voting must be built and tested before launch.</div>
+      </div>
+      <div class="assumption-item">
+        <div class="assumption-num">9</div>
+        <div><strong>60/40 weighting accepted</strong> &mdash; badgeholders carry 60% and veFIL holders 40% in the consensus model.</div>
+      </div>
+      <div class="assumption-item">
+        <div class="assumption-num">10</div>
+        <div><strong>Scope limited to PGF only</strong> &mdash; no protocol-parameter governance is in scope for Phase I.</div>
+      </div>
+    </div>
+
+    <!-- Flow diagram -->
+    <div class="flow-img-wrap">
+      <img src="images/vefil-flow.png" alt="End-to-end veFIL flow: FIL staked on GLIF, lock duration selected, veFIL issued, vote on Governance Hub, consensus determined, treasury outflows" />
+    </div>
+  </div>
+</section>
+
+<!-- ─── Governance Scope ─── -->
+<section id="governance">
+  <div class="section-inner wide">
+    <p class="section-label">Governance Scope</p>
+    <h2 class="section-title">Three Action Types</h2>
+    <p class="section-desc">
+      Phase I deliberately limits the voting surface to public-goods funding decisions.
+      Each action type has distinct thresholds, quorum requirements, and cadence.
+    </p>
+
+    <div class="action-cards">
+
+      <!-- Budget -->
+      <div class="action-card">
+        <span class="action-badge blue">Budget</span>
+        <h4>Annual Public Goods Budget</h4>
+        <p class="decision-q">
+          What should be the Filecoin Annual Public Goods Budget? How should it be divided
+          between ProPGF and RetroPGF?
+        </p>
+        <div class="action-meta">
+          <div class="action-meta-row">
+            <span class="label">Input</span>
+            <span class="value">Proposed budget</span>
+          </div>
+          <div class="action-meta-row">
+            <span class="label">Output</span>
+            <span class="value">Approved budget</span>
+          </div>
+          <div class="action-meta-row">
+            <span class="label">Threshold</span>
+            <span class="value">&gt;50% participating veFIL</span>
+          </div>
+          <div class="action-meta-row">
+            <span class="label">Quorum</span>
+            <span class="value">5% outstanding veFIL</span>
+          </div>
+          <div class="action-meta-row">
+            <span class="label">Cadence</span>
+            <span class="value">Annually</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Disbursement -->
+      <div class="action-card">
+        <span class="action-badge purple">Disbursement</span>
+        <h4>Funding Disbursement</h4>
+        <p class="decision-q">
+          Is the proposed tranche of funding in line with the annual budget and approved
+          for disbursement to ProPGF and RetroPGF programs?
+        </p>
+        <div class="action-meta">
+          <div class="action-meta-row">
+            <span class="label">Input</span>
+            <span class="value">Amount &amp; wallet addresses</span>
+          </div>
+          <div class="action-meta-row">
+            <span class="label">Output</span>
+            <span class="value">Funds moved to program treasuries</span>
+          </div>
+          <div class="action-meta-row">
+            <span class="label">Threshold</span>
+            <span class="value">&gt;50% participating veFIL</span>
+          </div>
+          <div class="action-meta-row">
+            <span class="label">Quorum</span>
+            <span class="value">2% outstanding veFIL</span>
+          </div>
+          <div class="action-meta-row">
+            <span class="label">Cadence</span>
+            <span class="value">Quarterly</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pulse Check -->
+      <div class="action-card">
+        <span class="action-badge green">Pulse Check</span>
+        <h4>Community Pulse Check</h4>
+        <p class="decision-q">
+          Are veFIL holders in favour or against a proposed non-binding poll question
+          relevant to the Filecoin ecosystem?
+        </p>
+        <div class="action-meta">
+          <div class="action-meta-row">
+            <span class="label">Input</span>
+            <span class="value">Yes/no poll question</span>
+          </div>
+          <div class="action-meta-row">
+            <span class="label">Output</span>
+            <span class="value">% in favour or opposed</span>
+          </div>
+          <div class="action-meta-row">
+            <span class="label">Threshold</span>
+            <span class="value">None (advisory only)</span>
+          </div>
+          <div class="action-meta-row">
+            <span class="label">Quorum</span>
+            <span class="value">TBD</span>
+          </div>
+          <div class="action-meta-row">
+            <span class="label">Cadence</span>
+            <span class="value">Ongoing, as needed</span>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /action-cards -->
+  </div>
+</section>
+
+<!-- ─── Voting & Consensus ─── -->
+<section id="voting">
+  <div class="section-inner wide">
+    <p class="section-label">Voting &amp; Consensus</p>
+    <h2 class="section-title">How Signals Are Collected and Combined</h2>
+    <p class="section-desc">
+      Badgeholders and veFIL holders vote independently. Their signals are then
+      mechanically combined using a preset weighted formula &mdash; no discretionary
+      override at any stage.
+    </p>
+
+    <!-- Two voting flows side by side -->
+    <div class="voting-flows">
+
+      <!-- Badgeholder flow -->
+      <div class="voting-flow-card">
+        <div class="flow-header">
+          <div class="flow-dot amber"></div>
+          <h4>Badgeholder Process</h4>
+        </div>
+        <ul class="flow-step-list">
+          <li>
+            <div class="flow-step-num amber">1</div>
+            <div class="step-text"><strong>Round Opens</strong><span>Projects submit applications for funding</span></div>
+          </li>
+          <li>
+            <div class="flow-step-num amber">2</div>
+            <div class="step-text"><strong>Review Period</strong><span>Badgeholders evaluate projects against criteria</span></div>
+          </li>
+          <li>
+            <div class="flow-step-num amber">3</div>
+            <div class="step-text"><strong>Allocation Submitted</strong><span>Each badgeholder distributes points across projects</span></div>
+          </li>
+          <li>
+            <div class="flow-step-num amber">4</div>
+            <div class="step-text"><strong>Signal Aggregated</strong><span>Individual allocations weighted by badgeholder count</span></div>
+          </li>
+          <li>
+            <div class="flow-step-num amber">5</div>
+            <div class="step-text"><strong>Combined with veFIL</strong><span>Badgeholder signal carries 60% in final allocation</span></div>
+          </li>
+        </ul>
+      </div>
+
+      <!-- veFIL holder flow -->
+      <div class="voting-flow-card">
+        <div class="flow-header">
+          <div class="flow-dot blue"></div>
+          <h4>veFIL Holder Process</h4>
+        </div>
+        <ul class="flow-step-list">
+          <li>
+            <div class="flow-step-num blue">1</div>
+            <div class="step-text"><strong>FIL Staked</strong><span>Deposit FIL with an approved staking partner</span></div>
+          </li>
+          <li>
+            <div class="flow-step-num blue">2</div>
+            <div class="step-text"><strong>Lock Duration Selected</strong><span>Minimum 6 months, maximum 1 year</span></div>
+          </li>
+          <li>
+            <div class="flow-step-num blue">3</div>
+            <div class="step-text"><strong>veFIL Issued</strong><span>Balance captured at the block when voting opens</span></div>
+          </li>
+          <li>
+            <div class="flow-step-num blue">4</div>
+            <div class="step-text"><strong>Allocate on Gov Hub</strong><span>Distribute veFIL across eligible projects (final, no changes)</span></div>
+          </li>
+          <li>
+            <div class="flow-step-num blue">5</div>
+            <div class="step-text"><strong>Signal Aggregated</strong><span>veFIL-weighted allocation carries 40% in final</span></div>
+          </li>
+        </ul>
+      </div>
+
+    </div><!-- /voting-flows -->
+
+    <!-- 60/40 Aggregation model -->
+    <div class="aggregation-block">
+      <h3>60/40 Preset Weighted Aggregation</h3>
+      <p>Both signals are published simultaneously after voting closes. Divergences are surfaced clearly in the results &mdash; this is intentional learning data for Phase I.</p>
+
+      <div class="agg-formula">
+        <div class="agg-signal">
+          <div class="pct amber">60%</div>
+          <div class="lbl">Badgeholder Signal</div>
+        </div>
+        <div class="agg-op">+</div>
+        <div class="agg-signal">
+          <div class="pct blue">40%</div>
+          <div class="lbl">veFIL Signal</div>
+        </div>
+        <div class="agg-op">=</div>
+        <div class="agg-signal">
+          <div class="pct dark">100%</div>
+          <div class="lbl">Final Allocation</div>
+        </div>
+      </div>
+
+      <div class="agg-example">
+        <strong>Worked example</strong><br>
+        Badgeholders allocate 40% to Project A. veFIL holders allocate 25% to Project A.
+        <code>Final = (0.6 &times; 40%) + (0.4 &times; 25%) = 34% to Project A</code>
+      </div>
+
+      <div class="agg-rationale">
+        <h4>Why 60/40 for Phase I</h4>
+        <ul>
+          <li><strong>Participation-robust:</strong> If early veFIL participation is low, dynamic weighting would either over-amplify a small voter base or render their signal irrelevant. Fixed weights avoid both failure modes.</li>
+          <li><strong>Conservative by design:</strong> Badgeholder influence dominates while veFIL signal quality is evaluated. Phase I is about learning whether capital-weighted signals produce coherent outcomes.</li>
+          <li><strong>No tie-break complexity:</strong> The formula applies mechanically with no discretionary override, making outcomes fully predictable and auditable.</li>
+          <li><strong>Tunable:</strong> Weights are a single parameter. If Phase I data supports a different split, it can be adjusted for Phase II without redesigning the system.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── Open Questions & Requirements ─── -->
+<section id="open">
+  <div class="section-inner wide">
+    <p class="section-label">Open Questions</p>
+    <h2 class="section-title">What Still Needs Answering</h2>
+    <p class="section-desc">
+      These items require further definition before Phase I can move to implementation.
+      They are listed here as the active design surface, not as blockers.
+    </p>
+
+    <div style="display: grid; gap: 48px; align-items: start;">
+      <div style="flex: 1;">
+        <div class="questions-list">
+          <div class="question-item">
+            <div class="question-icon">
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            </div>
+            <div>
+              <strong>veFIL Multiplier</strong>
+              <span>How is veFIL modified by lock duration? Economic simulations are required to calibrate the curve.</span>
+            </div>
+          </div>
+          <div class="question-item">
+            <div class="question-icon">
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            </div>
+            <div>
+              <strong>Snapshot Mechanism</strong>
+              <span>How and when is veFIL balance captured for a given vote? Block-level precision needs specification.</span>
+            </div>
+          </div>
+          <div class="question-item">
+            <div class="question-icon">
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            </div>
+            <div>
+              <strong>Adaptive Quorum</strong>
+              <span>After Phase I produces participation data, should quorum shift to a rolling-average model with a 2% floor and 10% ceiling?</span>
+            </div>
+          </div>
+          <div class="question-item">
+            <div class="question-icon">
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            </div>
+            <div>
+              <strong>On-Chain Representation</strong>
+              <span>Is veFIL a token, or is it tracked off-chain by staking partners? Implications differ for auditability and composability.</span>
+            </div>
+          </div>
+          <div class="question-item">
+            <div class="question-icon">
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            </div>
+            <div>
+              <strong>Delegation</strong>
+              <span>Can veFIL be partially or fully delegated in Phase I? If so, what are the constraints?</span>
+            </div>
+          </div>
+          <div class="question-item">
+            <div class="question-icon">
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            </div>
+            <div>
+              <strong>Storage Provider Collateral</strong>
+              <span>Will bonded collateral from storage providers be eligible for veFIL voting? If so, does it map to the owner or beneficiary address?</span>
+            </div>
+          </div>
+          <div class="question-item">
+            <div class="question-icon">
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            </div>
+            <div>
+              <strong>Budget Committee</strong>
+              <span>Should a dedicated committee be created with authority to submit and oversee the annual budget, with multi-sig oversight on disbursements?</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Requirements status table image -->
+      <div class="status-img-wrap" style="max-width: 680px;">
+        <img src="images/requirements-status.png" alt="Requirements status table: lock-up simulations (To Do), voting power decay (To Determine), staking partner agreements (In Progress), treasury simulations (To Do), SP collateral treatment (To Determine), APY mechanics (Out of Scope)" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── Roadmap ─── -->
+<section id="roadmap">
+  <div class="section-inner wide">
+    <p class="section-label">Roadmap</p>
+    <h2 class="section-title">From FIP to Launch</h2>
+    <p class="section-desc">
+      The rollout is coordinated across the broader Filecoin ecosystem. Each phase
+      has distinct goals, key moments, and success criteria.
+    </p>
+
+    <div class="roadmap-phases">
+
+      <!-- Phase 1 -->
+      <div class="phase-card phase-1">
+        <span class="phase-num blue">Phase 1</span>
+        <h4>Formal Introduction</h4>
+        <p class="phase-when">February 2026</p>
+        <p class="phase-goal">
+          Formally introduce veFIL through the FIP process and open community discussion.
+          This is the first official moment of broad awareness-building.
+        </p>
+        <ul>
+          <li>FIP submitted to GitHub</li>
+          <li>Announcement on Filecoin governance forums</li>
+          <li>Public-facing FIP Explainer published</li>
+          <li>FAQ prepared for common questions</li>
+        </ul>
+      </div>
+
+      <!-- Phase 2 -->
+      <div class="phase-card phase-2">
+        <span class="phase-num purple">Phase 2</span>
+        <h4>Community Discussion</h4>
+        <p class="phase-when">February &ndash; March 2026</p>
+        <p class="phase-goal">
+          Gather feedback on open design questions, build support, and refine the
+          proposal toward FIP approval with community consensus.
+        </p>
+        <ul>
+          <li>Live feedback session</li>
+          <li>Blog series (2&ndash;3 posts) on key design decisions</li>
+          <li>Economic modelling results shared publicly</li>
+          <li>Active monitoring of GitHub and Slack feedback</li>
+        </ul>
+      </div>
+
+      <!-- Phase 3 -->
+      <div class="phase-card phase-3">
+        <span class="phase-num green">Phase 3</span>
+        <h4>App Launch</h4>
+        <p class="phase-when">March &ndash; April 2026</p>
+        <p class="phase-goal">
+          Launch the veFIL application and drive early adoption. Target: 100M+ FIL
+          locked by end of year.
+        </p>
+        <ul>
+          <li>Coordinated launch-day announcement</li>
+          <li>Launch-week content push across channels</li>
+          <li>Live demo session</li>
+          <li>Step-by-step user guides and video walkthroughs</li>
+        </ul>
+      </div>
+
+    </div><!-- /roadmap-phases -->
+
+    <!-- Next steps -->
+    <div class="next-steps">
+      <h3>Recommended Next Steps</h3>
+      <div class="next-steps-grid">
+        <div class="next-step">
+          <div class="next-step-num">1</div>
+          <p><strong>Finalise partner agreements</strong> with GLIF and other selected staking providers.</p>
+        </div>
+        <div class="next-step">
+          <div class="next-step-num">2</div>
+          <p><strong>Complete economic simulations</strong> for lock-up windows and voting-power decay curves.</p>
+        </div>
+        <div class="next-step">
+          <div class="next-step-num">3</div>
+          <p><strong>Define technical specs</strong> for veFIL issuance, tracking, and snapshot mechanics.</p>
+        </div>
+        <div class="next-step">
+          <div class="next-step-num">4</div>
+          <p><strong>Begin Governance Hub development</strong> &mdash; the front-end must be ready before the first vote.</p>
+        </div>
+        <div class="next-step">
+          <div class="next-step-num">5</div>
+          <p><strong>Establish success metrics</strong> and Phase II promotion criteria based on Phase I participation data.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── Footer ─── -->
+<footer>
+  <div class="footer-name">Tanisha Katara &mdash; Senior Governance Consultant, Filecoin</div>
+  <div class="footer-disclaimer">
+    <p>
+      This case study presents exploratory, work-in-progress governance analysis.
+      It does not represent a final or adopted policy, and may or may not result
+      in execution or implementation.
+    </p>
+    <p>
+      The content is provided for informational purposes only and does not constitute
+      legal, financial, or investment advice. No representations or warranties are
+      made regarding the feasibility or adoption of the proposals described herein.
+    </p>
+    <p>Proprietary analysis &mdash; all rights reserved.</p>
+  </div>
+</footer>
+
+<!-- Nav scroll shadow -->
+<script>
+  (function() {
+    var nav = document.getElementById('nav');
+    window.addEventListener('scroll', function() {
+      nav.classList.toggle('scrolled', window.scrollY > 20);
+    });
+  })();
+</script>
+
+</body>
+</html>
